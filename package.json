@@ -1,0 +1,22 @@
+{
+  "name": "webcrawler",
+  "version": "1.0.0",
+  "description": "webcrawler reports on the internal linking profile of any website (a boot.dev project)",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surmavagit/webcrawler.git"
+  },
+  "author": "surmavagit",
+  "bugs": {
+    "url": "https://github.com/surmavagit/webcrawler/issues"
+  },
+  "homepage": "https://github.com/surmavagit/webcrawler#readme",
+  "devDependencies": {
+    "jest": "^29.6.4"
+  }
+}
