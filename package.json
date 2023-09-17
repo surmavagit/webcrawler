@@ -18,5 +18,8 @@
   "homepage": "https://github.com/surmavagit/webcrawler#readme",
   "devDependencies": {
     "jest": "^29.6.4"
+  },
+  "dependencies": {
+    "jsdom": "^22.1.0"
   }
 }
