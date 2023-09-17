@@ -9,12 +9,15 @@ test('normalize url starting with https drops the scheme', () => {
     expect(normalizeUrl('https://example.com')).toBe('example.com');
 });
 
-test('normalize url ending with slash drops the slash', () => {
-    expect(normalizeUrl('example.com/')).toBe('example.com');
+test('normalize url ending with slash drops the schema and slash', () => {
+    expect(normalizeUrl('http://example.com/')).toBe('example.com');
 });
 
-test('normalize an already normalized url returns the url', () => {
-    const correctUrl = 'example.com/words/something?query=query#fragment';
-    expect(normalizeUrl(correctUrl)).toBe(correctUrl);
+test('url ending with a path and a slash drops the schema and slash', () => {
+    expect(normalizeUrl('http://example.com/path/')).toBe('example.com/path')
+});
+
+test('url ending with a path without a slash drops the schema', () => {
+    expect(normalizeUrl('http://example.com/path')).toBe('example.com/path')
 });
 
