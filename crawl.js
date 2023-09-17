@@ -9,7 +9,28 @@ function normalizeUrl(urlString) {
 }
 
 function getURLsFromHTML(htmlBody, baseURL) {
-    return [];
+    const result = [];
+    const dom = new JSDOM(htmlBody);
+    const aTags = dom.window.document.querySelectorAll('a');
+    aTags.forEach(tag => {
+        let urlString = tag.getAttribute('href');
+        function isRelative(url) {
+            if (url.startsWith('http://') || url.startsWith('https://')) {
+                return false;
+            }
+            return true;
+        }
+        if (isRelative(urlString)) {
+            if (!baseURL.endsWith('/') && !urlString.startsWith('/')) {
+                urlString = '/' + urlString;
+            }
+            urlString = baseURL + urlString;
+        };
+        if (!result.includes(urlString)) {
+            result.push(urlString);
+        };
+    });
+    return result;
 }
 
 module.exports = { normalizeUrl, getURLsFromHTML }
