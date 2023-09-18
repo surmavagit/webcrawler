@@ -49,7 +49,6 @@ async function crawlPage(baseURL, currentURL, pages) {
         if (currNorm == baseNorm) {
             pages[currNorm] = 0;
         }
-        console.log('requesting ' + currentURL);
         try {
             const response = await fetch(currentURL);
             if (!response.ok) {

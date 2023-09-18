@@ -1,4 +1,5 @@
 const { crawlPage } = require('./crawl');
+const { printReport } = require('./report');
 
 const argIndex = 2;
 
@@ -11,10 +12,7 @@ function main() {
     const baseURL = process.argv[argIndex];
     console.log(`Crawler starts at ${baseURL}`)
     crawlPage(baseURL, baseURL, {}).then(pages => {
-        console.log('\nRESULTS:');
-        for (let page in pages) {
-            console.log(`${pages[page]}     ${page}`)
-        }
+        printReport(pages);
     })
 }
 
