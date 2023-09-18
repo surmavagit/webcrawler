@@ -1,3 +1,5 @@
+const { crawlPage } = require('./crawl');
+
 const argIndex = 2;
 
 function main() {
@@ -8,6 +10,7 @@ function main() {
     }
     const baseURL = process.argv[argIndex];
     console.log(`Crawler starts at ${baseURL}`)
+    crawlPage(baseURL);
 }
 
 main();
