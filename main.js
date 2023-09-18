@@ -10,7 +10,10 @@ function main() {
     }
     const baseURL = process.argv[argIndex];
     console.log(`Crawler starts at ${baseURL}`)
-    crawlPage(baseURL);
+    const pages = crawlPage(baseURL, baseURL, {});
+    for (let page in pages) {
+        console.log(`${page}: ${pages[page]}`)
+    }
 }
 
 main();

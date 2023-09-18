@@ -2,10 +2,11 @@ const { JSDOM } = require('jsdom');
 
 function normalizeUrl(urlString) {
     const parsed = new URL(urlString);
-    if (parsed.pathname.endsWith('/')) {
-        return parsed.host + parsed.pathname.slice(0, -1)
+    const domain = parsed.host + parsed.pathname;
+    if (domain.endsWith('/')) {
+        return domain.slice(0, -1);
     }
-    return parsed.host + parsed.pathname
+    return domain
 }
 
 function getURLsFromHTML(htmlBody, baseURL) {
@@ -33,25 +34,40 @@ function getURLsFromHTML(htmlBody, baseURL) {
     return result;
 }
 
-async function crawlPage(baseURL) {
-    let response;
-    try {
-        response = await fetch(baseURL);
-    } catch (err) {
-        console.error(err);
-        return;
+async function crawlPage(baseURL, currentURL, pages) {
+    const baseNorm = normalizeUrl(baseURL);
+    const currNorm = normalizeUrl(currentURL);
+    if (!currNorm.startsWith(baseNorm)) {
+        return pages;
     }
-    if (!response.ok) {
-        console.error(response.statusText);
-        return;
+
+    if (pages[currNorm] !== undefined) {
+        pages[currNorm]++;
+        return pages;
+    } else {
+        pages[currNorm] = 1;
+        if (currNorm == baseNorm) {
+            pages[currNorm] = 0;
+        }
+        console.log('requesting ' + currentURL);
+        try {
+            const response = await fetch(currentURL);
+            if (!response.ok || !response.headers.get('content-type').startsWith('text/html')) {
+                console.error('something went wrong with the request to: ' + currentURL);
+            } else {
+                const html = await response.text();
+                const links = getURLsFromHTML(html, baseURL);
+                for (let link of links) {
+                    pages = await crawlPage(baseURL, link, pages);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            return pages;
+        }
     }
-    const contentType = response.headers.get('content-type');
-    if (!contentType.startsWith('text/html')) {
-        console.error('wrong content type: ' + contentType);
-        return;
-    }
-    const text = await response.text();
-    console.log(text);
+
 }
 
 module.exports = { normalizeUrl, getURLsFromHTML, crawlPage }
