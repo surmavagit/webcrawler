@@ -52,8 +52,10 @@ async function crawlPage(baseURL, currentURL, pages) {
         console.log('requesting ' + currentURL);
         try {
             const response = await fetch(currentURL);
-            if (!response.ok || !response.headers.get('content-type').startsWith('text/html')) {
+            if (!response.ok) {
                 console.error('something went wrong with the request to: ' + currentURL);
+            } else if (!response.headers.get('content-type').startsWith('text/html')) {
+                console.error('not an html page: ' + currentURL);
             } else {
                 const html = await response.text();
                 const links = getURLsFromHTML(html, baseURL);
